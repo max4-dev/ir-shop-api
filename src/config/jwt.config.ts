@@ -5,5 +5,5 @@ import env from '../common/env';
 export const getJwtConfig = async (
   configService: ConfigService
 ): Promise<JwtModuleOptions> => ({
-  secret: env().jwt_secret
+  secret: env().jwt_secret,
 })
