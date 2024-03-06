@@ -4,10 +4,17 @@ import { AppService } from './app.service';
 import { MongoModule } from './module/mongo/mongo.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './module/auth/auth.module';
-import { UserModule } from './user/user.module';
+import { UserModule } from './module/user/user.module';
+import { CategoryModule } from './module/category/category.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), MongoModule, AuthModule, UserModule],
+  imports: [
+    ConfigModule.forRoot(),
+    MongoModule,
+    AuthModule,
+    UserModule,
+    CategoryModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
