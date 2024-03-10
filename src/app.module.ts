@@ -9,6 +9,7 @@ import { CategoryModule } from './module/category/category.module';
 import { PaginationModule } from './module/pagination/pagination.module';
 import { ProductModule } from './module/product/product.module';
 import { FilesModule } from './module/files/files.module';
+import { ReviewModule } from './module/review/review.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FilesModule } from './module/files/files.module';
     PaginationModule,
     ProductModule,
     FilesModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],

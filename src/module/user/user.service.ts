@@ -10,14 +10,15 @@ export class UserService {
   constructor(@InjectModel('Auth') private userSchema: Model<User>) {}
 
   async getUserById(id: string) {
-    const { phone, name, password } = await this.userSchema
+    const user = await this.userSchema
       .findOne({
         id,
       })
       .exec();
-    if (!phone) {
+    if (!user) {
       throw new BadRequestException('Пользователь не найден');
     }
+    const { phone, name, password } = user;
     return { id, phone, name, password };
   }
 
