@@ -31,16 +31,16 @@ export class FilesService {
         ),
       );
 
-      const res = await this.commandBus.execute(
-        new UploadCommand(
-          file.buffer,
-          `images/${folder}/${fileName}.${file.originalname.split('.').at(-1)}`,
-          file.mimetype
-        ));
+      // const res = await this.commandBus.execute(
+      //   new UploadCommand(
+      //     file.buffer,
+      //     `images/${folder}/${fileName}.${file.originalname.split('.').at(-1)}`,
+      //     file.mimetype
+      //   ));
 
       return {
         urls: {
-          original: env().bucket.s3 + res.data.fileName,
+          // original: env().bucket.s3 + res.data.fileName,
           webP: env().bucket.s3 + resWebP.data.fileName,
         },
       };
