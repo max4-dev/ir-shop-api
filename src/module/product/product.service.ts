@@ -5,11 +5,13 @@ import { slugify } from 'transliteration';
 import { v4 as uuidv4 } from 'uuid';
 import { ProductDto } from './dto/product.dto';
 import { IProduct } from './interface/product.interface';
+import { IReview } from '../review/interface/review.interface';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel('Products') private productSchema: Model<IProduct>,
+    @InjectModel('Reviews') private reviewSchema: Model<IReview>,
   ) {}
 
   async getProductById(id: string) {
@@ -80,10 +82,14 @@ export class ProductService {
       .findOneAndDelete({ id })
       .exec();
 
+    const deletedReviews = await this.reviewSchema
+      .deleteMany({ productId: id })
+      .exec();
+
     if (!deletedProduct) {
       throw new NotFoundException('Продукт не найден');
     }
 
-    return deletedProduct;
+    return { product: deletedProduct, reviews: deletedReviews };
   }
 }
