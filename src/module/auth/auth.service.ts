@@ -77,12 +77,14 @@ export class AuthService {
       .exec();
 
     if (!user) {
-      throw new NotFoundException('Пользователь не найден');
+      throw new BadRequestException('Неверные данные');
     }
 
     const isValid = await verify(user.password, password);
 
-    if (!isValid) throw new UnauthorizedException('Неверный пароль');
+    if (!isValid) {
+      throw new BadRequestException('Неверные данные');
+    }
 
     return user;
   }
@@ -94,7 +96,7 @@ export class AuthService {
     });
 
     const refreshToken = await this.jwt.signAsync(data, {
-      expiresIn: '7d',
+      expiresIn: '2d',
     });
 
     return { accessToken, refreshToken };

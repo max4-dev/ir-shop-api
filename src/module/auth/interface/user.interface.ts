@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-// import { IReview } from './review.interface';
+// import { IReview } from 'src/module/review/interface/review.interface';
 // import { IOrder } from './order.interface';
 
 export interface User extends Document {
