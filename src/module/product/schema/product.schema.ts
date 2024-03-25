@@ -8,4 +8,6 @@ export const ProductSchema = new mongoose.Schema({
   description: String,
   images: [String],
   categories: [String],
+  price: Number,
+  inStock: Boolean,
 })
