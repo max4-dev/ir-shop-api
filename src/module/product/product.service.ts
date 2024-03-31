@@ -60,11 +60,13 @@ export class ProductService {
   }
 
   async update(id: string, dto: ProductDto) {
+    const priceWithSale = dto.price - dto.price * (dto.salePercent / 100);
     const updatedProduct = await this.productSchema
       .findOneAndUpdate(
         { id },
         {
           slug: slugify(dto.title),
+          priceWithSale,
           ...dto,
         },
       )

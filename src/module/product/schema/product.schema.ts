@@ -10,4 +10,6 @@ export const ProductSchema = new mongoose.Schema({
   categories: [String],
   price: Number,
   inStock: Boolean,
+  rating: Number,
+  priceWithSale: Number,
 })
