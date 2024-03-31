@@ -27,4 +27,7 @@ export class ProductDto {
 
   @IsBoolean()
   inStock: boolean;
+
+  @IsNumber()
+  salePercent: number;
 }
