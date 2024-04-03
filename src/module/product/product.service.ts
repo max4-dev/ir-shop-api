@@ -6,12 +6,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { ProductDto } from './dto/product.dto';
 import { IProduct } from './interface/product.interface';
 import { IReview } from '../review/interface/review.interface';
+import { PaginationService } from '../pagination/pagination.service';
+import { PaginationDto } from '../pagination/dto/pagination.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel('Products') private productSchema: Model<IProduct>,
     @InjectModel('Reviews') private reviewSchema: Model<IReview>,
+    private readonly paginationService: PaginationService,
   ) {}
 
   async getProductById(id: string) {
@@ -26,8 +29,9 @@ export class ProductService {
     return product;
   }
 
-  async getAll() {
-    return this.productSchema.find().exec();
+  async getLimited(query: PaginationDto) {
+    const { perPage, skip } = this.paginationService.getPagination(query);
+    return this.productSchema.find().skip(skip).limit(perPage).exec();
   }
 
   async getProductBySlug(slug: string) {

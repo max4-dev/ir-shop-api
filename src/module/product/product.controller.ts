@@ -7,20 +7,22 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
 import { Auth } from '../auth/decorators/auth.decorator';
+import { PaginationDto } from '../pagination/dto/pagination.dto';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
-  async getAll() {
-    return this.productService.getAll();
+  async getLimited(@Query() query: PaginationDto) {
+    return this.productService.getLimited(query);
   }
 
   @Get('by-slug/:slug')
