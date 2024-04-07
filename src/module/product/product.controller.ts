@@ -20,9 +20,14 @@ import { PaginationDto } from '../pagination/dto/pagination.dto';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  // @Get()
+  // async getLimited(@Query() query: PaginationDto) {
+  //   return this.productService.getLimited(query);
+  // }
+
   @Get()
-  async getLimited(@Query() query: PaginationDto) {
-    return this.productService.getLimited(query);
+  async getLimited() {
+    return this.productService.getAll();
   }
 
   @Get('by-slug/:slug')
