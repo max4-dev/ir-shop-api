@@ -29,9 +29,23 @@ export class ProductService {
     return product;
   }
 
+  async getAll() {
+    return this.productSchema.find().exec();
+  }
+
   async getLimited(query: PaginationDto) {
     const { perPage, skip } = this.paginationService.getPagination(query);
-    return this.productSchema.find().skip(skip).limit(perPage).exec();
+    const totalCount = await this.productSchema.countDocuments();
+    const totalPages = Math.ceil(totalCount / perPage);
+    return {
+      products: await this.productSchema
+        .find()
+        .skip(skip)
+        .limit(perPage)
+        .exec(),
+      page: skip + 1,
+      pages: totalPages,
+    };
   }
 
   async getProductBySlug(slug: string) {
