@@ -6,4 +6,5 @@ export const CategorySchema = new mongoose.Schema({
   updatedAt: Date,
   name: String,
   slug: String,
-})
+  parent: String,
+});

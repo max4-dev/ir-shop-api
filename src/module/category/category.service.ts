@@ -40,12 +40,40 @@ export class CategoryService {
     return category;
   }
 
-  async create() {
+  async create(dto: CategoryDto) {
     try {
+      const alredyExistCategory = await this.categorySchema
+        .findOne({ name: dto.name })
+        .exec();
+
+      if (alredyExistCategory) {
+        throw new NotFoundException('Это имя уже занято');
+      }
+
+      if (!dto.parent) {
+        const category = await new this.categorySchema({
+          id: uuidv4(),
+          name: dto.name,
+          slug: slugify(dto.name),
+          parent: null,
+        }).save();
+
+        return category;
+      }
+
+      const parentCategory = await this.categorySchema
+        .findOne({ slug: dto.parent })
+        .exec();
+
+      if (!parentCategory) {
+        throw new NotFoundException('Родительская категория не найдена');
+      }
+
       const category = await new this.categorySchema({
         id: uuidv4(),
-        name: '',
-        slug: '',
+        name: dto.name,
+        slug: slugify(dto.name),
+        parent: parentCategory.slug,
       }).save();
 
       return category;
@@ -55,12 +83,39 @@ export class CategoryService {
   }
 
   async update(id: string, dto: CategoryDto) {
+    if (!dto.parent) {
+      const updatedCategory = await this.categorySchema
+        .findOneAndUpdate(
+          { id },
+          {
+            name: dto.name,
+            slug: slugify(dto.name),
+          },
+        )
+        .exec();
+
+      if (!updatedCategory) {
+        throw new NotFoundException('Категория не найдена');
+      }
+
+      return updatedCategory;
+    }
+
+    const parentCategory = await this.categorySchema
+      .findOne({ slug: slugify(dto.parent) })
+      .exec();
+
+    if (!parentCategory || parentCategory.id === id) {
+      throw new NotFoundException('Родительская категория не найдена');
+    }
+
     const updatedCategory = await this.categorySchema
       .findOneAndUpdate(
         { id },
         {
           name: dto.name,
           slug: slugify(dto.name),
+          parent: slugify(dto.parent),
         },
       )
       .exec();

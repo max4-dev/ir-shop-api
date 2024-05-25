@@ -6,4 +6,5 @@ export interface ICategory extends Document {
   updatedAt: Date;
   name: string;
   slug: string;
+  parent?: string;
 }
