@@ -62,7 +62,7 @@ export class CategoryService {
       }
 
       const parentCategory = await this.categorySchema
-        .findOne({ slug: dto.parent })
+        .findOne({ slug: slugify(dto.parent) })
         .exec();
 
       if (!parentCategory) {
