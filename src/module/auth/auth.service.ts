@@ -26,7 +26,7 @@ export class AuthService {
     try {
       const existUser = await this.userSchema
         .findOne({
-          email: dto.phone,
+          phone: dto.phone,
         })
         .exec();
 
@@ -67,6 +67,16 @@ export class AuthService {
       user: this.returnUserFields(user),
       ...tokens,
     };
+  }
+
+  async validatePassword(dto: LoginDto) {
+    const user = await this.validateUser(dto);
+
+    if (!user) {
+      throw new BadRequestException('Неверный логин или пароль');
+    }
+
+    return true;
   }
 
   private async validateUser({ phone, password }: LoginDto) {
