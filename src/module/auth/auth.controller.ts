@@ -40,6 +40,13 @@ export class AuthController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
+  @Post('validate')
+  async validatePassword(@Body() dto: LoginDto) {
+    return this.authService.validatePassword(dto);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
   @Post('login/access-token')
   async getNewTokens(@Body() dto: RefreshTokenDto) {
     return this.authService.getNewTokens(dto.refreshToken);
