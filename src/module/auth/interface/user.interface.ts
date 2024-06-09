@@ -1,12 +1,12 @@
 import { Document } from 'mongoose';
+import { IOrder } from 'src/order/interface/order.interface';
 // import { IReview } from 'src/module/review/interface/review.interface';
-// import { IOrder } from './order.interface';
 
 export interface User extends Document {
   id: string;
   name: string;
   phone: string;
   password: string;
-  // orders: IOrder[],
+  orders: IOrder[];
   // reviews: IReview[],
 }

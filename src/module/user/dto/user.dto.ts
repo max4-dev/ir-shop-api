@@ -16,3 +16,19 @@ export class UserDto {
   @IsString()
   name?: string;
 }
+
+export class PrivateUserDto {
+  @IsString()
+  id: string;
+
+  @IsPhoneNumber()
+  phone: string;
+
+  @IsString()
+  name: string;
+}
+
+export class UserAddress {
+  @IsString()
+  value: string;
+}
