@@ -76,7 +76,7 @@ export class AuthService {
       throw new BadRequestException('Неверный логин или пароль');
     }
 
-    return true;
+    return { status: true };
   }
 
   private async validateUser({ phone, password }: LoginDto) {

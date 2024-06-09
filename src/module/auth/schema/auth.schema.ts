@@ -5,4 +5,5 @@ export const UserSchema = new mongoose.Schema({
   password: String,
   name: String,
   id: String,
-})
+  orders: Array,
+});

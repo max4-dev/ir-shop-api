@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'argon2';
 import { Model } from 'mongoose';
@@ -16,10 +16,10 @@ export class UserService {
       })
       .exec();
     if (!user) {
-      throw new BadRequestException('Пользователь не найден');
+      throw new HttpException('Пользователь не найден', 403);
     }
-    const { phone, name, password } = user;
-    return { id, phone, name, password };
+    const { phone, name } = user;
+    return { id, phone, name };
   }
 
   async updateProfile(id: string, dto: UserDto) {
@@ -33,7 +33,11 @@ export class UserService {
       throw new BadRequestException('Этот номер телефона уже используется');
     }
 
-    const user = await this.getUserById(id);
+    const user = await this.userSchema
+      .findOne({
+        id,
+      })
+      .exec();
 
     const updatedUser = await this.userSchema
       .findOneAndUpdate(

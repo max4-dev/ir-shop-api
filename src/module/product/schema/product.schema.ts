@@ -12,4 +12,4 @@ export const ProductSchema = new mongoose.Schema({
   inStock: Boolean,
   rating: Number,
   priceWithSale: Number,
-})
+});
