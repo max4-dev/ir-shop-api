@@ -102,11 +102,11 @@ export class AuthService {
   private async issueTokens(userId: string) {
     const data = { id: userId };
     const accessToken = await this.jwt.signAsync(data, {
-      expiresIn: '1h',
+      expiresIn: '7h',
     });
 
     const refreshToken = await this.jwt.signAsync(data, {
-      expiresIn: '2d',
+      expiresIn: '30d',
     });
 
     return { accessToken, refreshToken };

@@ -10,6 +10,6 @@ export interface IProduct extends Document {
   categories: string[];
   price: number;
   inStock: boolean;
-  rating: number;
   priceWithSale: number;
+  createdAt: string;
 }

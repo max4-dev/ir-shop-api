@@ -5,13 +5,11 @@ import { slugify } from 'transliteration';
 import { v4 as uuidv4 } from 'uuid';
 import { ProductDto } from './dto/product.dto';
 import { IProduct } from './interface/product.interface';
-import { IReview } from '../review/interface/review.interface';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel('Products') private productSchema: Model<IProduct>,
-    @InjectModel('Reviews') private reviewSchema: Model<IReview>,
   ) {}
 
   async getProductById(id: string) {
@@ -27,7 +25,7 @@ export class ProductService {
   }
 
   async getAll() {
-    return this.productSchema.find().exec();
+    return (await this.productSchema.find()).reverse();
   }
 
   async getProductBySlug(slug: string) {
@@ -42,15 +40,14 @@ export class ProductService {
     return product;
   }
 
-  async create() {
+  async create(dto: ProductDto) {
     try {
+      const priceWithSale = dto.price - dto.price * (dto.salePercent / 100);
       const product = await new this.productSchema({
         id: uuidv4(),
-        title: '',
-        salePercent: 0,
-        slug: '',
-        images: [],
-        categories: [],
+        slug: slugify(dto.title),
+        priceWithSale,
+        ...dto,
       }).save();
 
       return product;
@@ -84,14 +81,10 @@ export class ProductService {
       .findOneAndDelete({ id })
       .exec();
 
-    const deletedReviews = await this.reviewSchema
-      .deleteMany({ productId: id })
-      .exec();
-
     if (!deletedProduct) {
       throw new NotFoundException('Продукт не найден');
     }
 
-    return { product: deletedProduct, reviews: deletedReviews };
+    return { product: deletedProduct };
   }
 }
