@@ -8,7 +8,6 @@ import { UserModule } from './module/user/user.module';
 import { CategoryModule } from './module/category/category.module';
 import { ProductModule } from './module/product/product.module';
 import { FilesModule } from './module/files/files.module';
-import { ReviewModule } from './module/review/review.module';
 import { OrderModule } from './order/order.module';
 
 @Module({
@@ -20,7 +19,6 @@ import { OrderModule } from './order/order.module';
     CategoryModule,
     ProductModule,
     FilesModule,
-    ReviewModule,
     OrderModule,
   ],
   controllers: [AppController],
