@@ -7,19 +7,22 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
 import { Auth } from '../auth/decorators/auth.decorator';
+import { Roles } from 'src/role/decorators/role.decorator';
+import { RoleGuard } from '../auth/guards/role.guard';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
-  async getLimited() {
+  async getAll() {
     return this.productService.getAll();
   }
 
@@ -35,14 +38,16 @@ export class ProductController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth()
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() dto: ProductDto) {
     return this.productService.update(id, dto);
   }
 
   @HttpCode(200)
-  @Auth()
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @Post()
   async create(@Body() dto: ProductDto) {
     return this.productService.create(dto);
@@ -50,7 +55,8 @@ export class ProductController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth()
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.productService.delete(id);

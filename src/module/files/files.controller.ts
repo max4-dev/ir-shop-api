@@ -3,6 +3,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -10,6 +11,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { FilesService } from './files.service';
+import { Roles } from 'src/role/decorators/role.decorator';
+import { RoleGuard } from '../auth/guards/role.guard';
 
 @Controller('files')
 export class FilesController {
@@ -17,7 +20,8 @@ export class FilesController {
 
   @UsePipes(new ValidationPipe())
   @Post('upload-image')
-  @Auth()
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @UseInterceptors(FileInterceptor('files'))
   async uploadImage(
     @UploadedFile() file: Express.Multer.File,
