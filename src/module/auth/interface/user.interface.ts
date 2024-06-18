@@ -7,4 +7,5 @@ export interface User extends Document {
   phone: string;
   password: string;
   orders: IOrder[];
+  role: string;
 }

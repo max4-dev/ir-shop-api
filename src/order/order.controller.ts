@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,6 +16,8 @@ import { OrderService } from './order.service';
 import { Auth } from 'src/module/auth/decorators/auth.decorator';
 import { OrderDto } from './dto/order.dto';
 import { CurrentUser } from 'src/module/auth/decorators/user.decorator';
+import { RoleGuard } from 'src/module/auth/guards/role.guard';
+import { Roles } from 'src/role/decorators/role.decorator';
 
 @Controller('order')
 export class OrderController {
@@ -22,7 +25,8 @@ export class OrderController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth()
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @Get()
   async getAllOrders() {
     return this.orderService.getAllOrders();
@@ -46,7 +50,8 @@ export class OrderController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth()
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @Put(':id')
   async updateOrder(
     @Param('id') orderId: string,
@@ -58,7 +63,8 @@ export class OrderController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth()
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @Delete(':id')
   async deleteOrder(
     @Param('id') orderId: string,

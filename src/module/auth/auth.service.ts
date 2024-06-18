@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,10 +39,11 @@ export class AuthService {
         id: uuidv4(),
         phone,
         name,
+        role: 'USER',
         password: await hash(password),
       }).save();
 
-      const tokens = await this.issueTokens(user.id);
+      const tokens = await this.issueTokens(user.id, user.role);
 
       return {
         user: this.returnUserFields(user),
@@ -61,7 +61,7 @@ export class AuthService {
       throw new BadRequestException('Неверный логин или пароль');
     }
 
-    const tokens = await this.issueTokens(user.id);
+    const tokens = await this.issueTokens(user.id, user.role);
 
     return {
       user: this.returnUserFields(user),
@@ -99,8 +99,9 @@ export class AuthService {
     return user;
   }
 
-  private async issueTokens(userId: string) {
-    const data = { id: userId };
+  private async issueTokens(userId: string, role: string) {
+    const data = { id: userId, role };
+
     const accessToken = await this.jwt.signAsync(data, {
       expiresIn: '7h',
     });
@@ -122,7 +123,7 @@ export class AuthService {
       })
       .exec();
 
-    const tokens = await this.issueTokens(user.id);
+    const tokens = await this.issueTokens(user.id, user.role);
 
     return {
       user: this.returnUserFields(user),
