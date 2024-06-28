@@ -135,6 +135,7 @@ export class AuthService {
     return {
       id: user.id,
       phone: user.phone,
+      role: user.role,
     };
   }
 }

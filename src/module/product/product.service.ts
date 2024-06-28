@@ -42,7 +42,7 @@ export class ProductService {
 
   async create(dto: ProductDto) {
     try {
-      const priceWithSale = dto.price - dto.price * (dto.salePercent / 100);
+      const priceWithSale = this.calcPriceWithSale(dto.price, dto.salePercent);
       const product = await new this.productSchema({
         id: uuidv4(),
         slug: slugify(dto.title),
@@ -57,17 +57,16 @@ export class ProductService {
   }
 
   async update(id: string, dto: ProductDto) {
-    const priceWithSale = dto.price - dto.price * (dto.salePercent / 100);
-    const updatedProduct = await this.productSchema
-      .findOneAndUpdate(
-        { id },
-        {
-          slug: slugify(dto.title),
-          priceWithSale,
-          ...dto,
-        },
-      )
-      .exec();
+    const priceWithSale = this.calcPriceWithSale(dto.price, dto.salePercent);
+
+    const updatedProduct = await this.productSchema.findOneAndUpdate(
+      { id },
+      {
+        slug: slugify(dto.title),
+        priceWithSale: priceWithSale,
+        ...dto,
+      },
+    );
 
     if (!updatedProduct) {
       throw new NotFoundException('Продукт не найден');
@@ -86,5 +85,9 @@ export class ProductService {
     }
 
     return { product: deletedProduct };
+  }
+
+  private calcPriceWithSale(price: number, salePercent: number) {
+    return Math.ceil(price - price * (salePercent / 100));
   }
 }

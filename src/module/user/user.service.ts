@@ -16,7 +16,7 @@ export class UserService {
       })
       .exec();
     if (!user) {
-      throw new HttpException('Пользователь не найден', 403);
+      throw new HttpException('Пользователь не найден', 405);
     }
     const { phone, name } = user;
     return { id, phone, name };
@@ -50,5 +50,19 @@ export class UserService {
       .exec();
 
     return updatedUser;
+  }
+
+  async checkRole(userId: string) {
+    const user = await this.userSchema
+      .findOne({
+        id: userId,
+      })
+      .exec();
+
+    if (!user) {
+      throw new BadRequestException('Пользователь не найден');
+    }
+
+    return user.role;
   }
 }
