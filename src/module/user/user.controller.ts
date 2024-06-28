@@ -29,4 +29,10 @@ export class UserController {
   async updateProfile(@CurrentUser('id') id: string, @Body() dto: UserDto) {
     return this.userService.updateProfile(id, dto);
   }
+
+  @Get('role')
+  @Auth()
+  async checkRole(@CurrentUser('id') userId: string) {
+    return this.userService.checkRole(userId);
+  }
 }

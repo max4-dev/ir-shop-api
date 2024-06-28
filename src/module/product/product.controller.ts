@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
-import { Auth } from '../auth/decorators/auth.decorator';
 import { Roles } from 'src/role/decorators/role.decorator';
 import { RoleGuard } from '../auth/guards/role.guard';
 
