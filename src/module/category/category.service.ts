@@ -62,7 +62,7 @@ export class CategoryService {
       }
 
       const parentCategory = await this.categorySchema
-        .findOne({ slug: slugify(dto.parent) })
+        .findOne({ id: dto.parent })
         .exec();
 
       if (!parentCategory) {
@@ -73,7 +73,7 @@ export class CategoryService {
         id: uuidv4(),
         name: dto.name,
         slug: slugify(dto.name),
-        parent: parentCategory.slug,
+        parent: parentCategory.id,
       }).save();
 
       return category;
@@ -90,6 +90,7 @@ export class CategoryService {
           {
             name: dto.name,
             slug: slugify(dto.name),
+            parent: null,
           },
         )
         .exec();
@@ -102,7 +103,7 @@ export class CategoryService {
     }
 
     const parentCategory = await this.categorySchema
-      .findOne({ slug: slugify(dto.parent) })
+      .findOne({ id: dto.parent })
       .exec();
 
     if (!parentCategory || parentCategory.id === id) {
@@ -115,7 +116,7 @@ export class CategoryService {
         {
           name: dto.name,
           slug: slugify(dto.name),
-          parent: slugify(dto.parent),
+          parent: parentCategory.id,
         },
       )
       .exec();
