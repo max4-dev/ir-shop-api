@@ -20,6 +20,7 @@ export class UploadHandler implements ICommandHandler {
 
   async execute({ contentType, file, name }: UploadCommand) {
     await this.b2.authorize();
+
     const uploadUrl = await this.b2.getUploadUrl({ bucketId: env().bucket.id });
 
     return await this.b2.uploadFile({
