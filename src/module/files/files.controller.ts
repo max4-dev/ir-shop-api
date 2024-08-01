@@ -20,8 +20,8 @@ export class FilesController {
 
   @UsePipes(new ValidationPipe())
   @Post('upload-image')
-  @Roles('ADMIN')
-  @UseGuards(RoleGuard)
+  // @Roles('ADMIN')
+  // @UseGuards(RoleGuard)
   @UseInterceptors(FileInterceptor('files'))
   async uploadImage(
     @UploadedFile() file: Express.Multer.File,

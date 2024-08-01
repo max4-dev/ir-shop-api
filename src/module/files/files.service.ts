@@ -12,11 +12,11 @@ export class FilesService {
   async uploadImage(file: Express.Multer.File, folder: string) {
     if (!folder) {
       throw new BadRequestException('Укажите сущность для сохранения');
-    };
+    }
 
     if (!file) {
       throw new BadRequestException('Файл не найден');
-    };
+    }
 
     const fileName = 'file_' + uuidv4();
 

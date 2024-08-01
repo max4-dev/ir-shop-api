@@ -9,17 +9,22 @@ import { UserDto } from './dto/user.dto';
 export class UserService {
   constructor(@InjectModel('Auth') private userSchema: Model<User>) {}
 
+  async getAll() {
+    const users = await this.userSchema.find().select('-password');
+
+    return users;
+  }
+
   async getUserById(id: string) {
     const user = await this.userSchema
       .findOne({
         id,
       })
-      .exec();
+      .select('-password');
     if (!user) {
       throw new HttpException('Пользователь не найден', 405);
     }
-    const { phone, name } = user;
-    return { id, phone, name };
+    return user;
   }
 
   async updateProfile(id: string, dto: UserDto) {

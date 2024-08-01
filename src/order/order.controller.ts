@@ -52,6 +52,15 @@ export class OrderController {
   @HttpCode(200)
   @Roles('ADMIN')
   @UseGuards(RoleGuard)
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    return this.orderService.getById(id);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Roles('ADMIN')
+  @UseGuards(RoleGuard)
   @Put(':id')
   async updateOrder(
     @Param('id') orderId: string,

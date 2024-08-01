@@ -25,7 +25,17 @@ export class OrderService {
       throw new BadRequestException('Не удалось найти пользователя');
     }
 
-    return user.orders.reverse();
+    return user.orders;
+  }
+
+  async getById(id: string) {
+    const order = await this.orderSchema.findOne({ id });
+
+    if (!order) {
+      throw new BadRequestException('Не удалось найти заказ');
+    }
+
+    return order;
   }
 
   async createOrder(dto: OrderDto) {
